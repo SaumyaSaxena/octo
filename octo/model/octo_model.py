@@ -183,7 +183,6 @@ class OctoModel:
         """
         if pad_mask is None:
             pad_mask = observations["pad_mask"]
-
         transformer_outputs = self.run_transformer(
             observations, tasks, pad_mask, train=train
         )
@@ -265,6 +264,7 @@ class OctoModel:
             example_batch["task"],
             example_batch["observation"]["pad_mask"],
         )["params"]
+        
         # restore params, checking to make sure the shape matches
         checkpointer = orbax.checkpoint.CheckpointManager(
             checkpoint_path, orbax.checkpoint.PyTreeCheckpointer()

@@ -166,7 +166,6 @@ class BlockTransformer(nn.Module):
 
         # Assemble input tokens (batch, total_tokens, token_embedding_size)
         input_tokens = self.assemble_input_tokens(prefix_groups, timestep_groups)
-
         # Creates correct attention mask for transformer using group attention rules and masks
         # Shape: (batch, 1, total_tokens, total_tokens)
         attention_mask = self.generate_attention_mask(prefix_groups, timestep_groups)
@@ -234,7 +233,6 @@ class BlockTransformer(nn.Module):
         horizon = timestep_groups[0].tokens.shape[1]
         tokens_per_prefix_group = [group.tokens.shape[1] for group in prefix_groups]
         n_prefix_tokens = sum(tokens_per_prefix_group)
-
         prefix_embeddings, timestep_embeddings = jnp.split(
             output_tokens, [n_prefix_tokens], axis=1
         )
@@ -262,7 +260,6 @@ class BlockTransformer(nn.Module):
         timestep_embeddings_split = split_tokens(
             timestep_embeddings, tokens_per_timestep_group, axis=2
         )
-
         all_timestep_outputs = [
             group.replace(tokens=embeddings)
             for group, embeddings in zip(timestep_groups, timestep_embeddings_split)

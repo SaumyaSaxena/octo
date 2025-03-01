@@ -152,7 +152,6 @@ class OctoTransformer(nn.Module):
         #
         # First, add the task tokens
         #
-
         for name, tok in self.task_tokenizers.items():
             group_name = f"task_{name}"
             # Receive inputs from tokenizer and cast to embedding size
@@ -160,7 +159,6 @@ class OctoTransformer(nn.Module):
             if tokenizer_output is None:
                 logging.warning(f"Skipping task tokenizer: {group_name}")
                 continue
-
             task_tokens = nn.Dense(
                 self.token_embedding_size, name=f"{group_name}_projection"
             )(tokenizer_output.tokens)
@@ -194,7 +192,6 @@ class OctoTransformer(nn.Module):
                 self.token_embedding_size, name=f"{group_name}_projection"
             )(tokenizer_output.tokens)
             # obs_tokens shape is (batch, horizon, n_tokens, token_embedding_size)
-
             # Add positional embedding
             obs_tokens += self._create_positional_embedding(group_name, obs_tokens)
 
@@ -245,7 +242,6 @@ class OctoTransformer(nn.Module):
         assert (
             self.transformer_kwargs.get("add_position_embedding", False) is False
         ), "Already added positional embeddings to the tokens"
-
         prefix_outputs, timestep_outputs = BlockTransformer(self.transformer_kwargs)(
             all_prefix_groups,
             all_timestep_groups,
@@ -300,6 +296,7 @@ class OctoTransformer(nn.Module):
         if tokens.ndim == 4:
             # Use only the timesteps we receive as input
             embedding = embedding[:, : tokens.shape[1]]
+        
         return jnp.broadcast_to(embedding, tokens.shape)
 
 
@@ -388,3 +385,4 @@ class OctoModule(nn.Module):
             octo_transformer=model_def,
             heads=head_defs,
         )
+

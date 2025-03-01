@@ -498,7 +498,6 @@ class DiffusionActionHead(nn.Module):
                 (*embeddings.shape[:2], self.action_dim * self.pred_horizon),
                 dtype=jnp.float32,
             )
-
         pred_eps = self.diffusion_model(embeddings, noisy_actions, time, train=train)
         return pred_eps
 

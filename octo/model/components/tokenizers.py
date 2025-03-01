@@ -186,6 +186,7 @@ class LanguageTokenizer(nn.Module):
             from transformers import AutoConfig, FlaxAutoModel, FlaxT5EncoderModel
 
             config = AutoConfig.from_pretrained(self.encoder)
+            self.hidden_dim = config.d_model
             if "t5" in self.encoder:
                 self.hf_model = FlaxT5EncoderModel(config).module
             else:
@@ -201,7 +202,6 @@ class LanguageTokenizer(nn.Module):
             logging.warning("No language inputs found. Skipping tokenizer entirely.")
             assert self.proper_pad_mask, "Cannot skip unless using proper pad mask."
             return None
-
         if not isinstance(tasks["language_instruction"], jax.Array):
             assert (
                 self.encoder is not None

@@ -113,7 +113,6 @@ class SmallStem(nn.Module):
         assert (
             expecting_cond_var == received_cond_var
         ), "Only pass in cond var iff model expecting cond var"
-
         x = normalize_images(observations, self.img_norm_type)
         for n, (kernel_size, stride, features, padding) in enumerate(
             zip(
@@ -122,7 +121,7 @@ class SmallStem(nn.Module):
                 self.features,
                 self.padding,
             )
-        ):
+        ):  
             x = StdConv(
                 features=features,
                 kernel_size=(kernel_size, kernel_size),
@@ -131,7 +130,6 @@ class SmallStem(nn.Module):
             )(x)
             x = nn.GroupNorm()(x)
             x = nn.relu(x)
-
         x = nn.Conv(
             features=self.num_features,
             kernel_size=(self.patch_size // 16, self.patch_size // 16),
@@ -139,6 +137,7 @@ class SmallStem(nn.Module):
             padding="VALID",
             name="embedding",
         )(x)
+        
         if self.use_film:
             assert cond_var is not None, "Cond var is None, nothing to condition on"
             x = FilmConditioning()(x, cond_var)

@@ -389,7 +389,7 @@ def main(_):
 
         with timer("dataset"):
             batch = next(train_data_iter)
-
+        import ipdb; ipdb.set_trace()
         with timer("train"):
             train_state, update_info = train_step(train_state, batch)
 

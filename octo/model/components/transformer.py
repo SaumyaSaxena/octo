@@ -206,7 +206,6 @@ class Transformer(nn.Module):
           output of a transformer encoder.
         """
         assert x.ndim == 3  # (batch, len, emb)
-
         if self.add_position_embedding:
             x = AddPositionEmbs(
                 posemb_init=nn.initializers.normal(stddev=0.02),  # from BERT.
